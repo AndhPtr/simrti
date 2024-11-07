@@ -39,13 +39,23 @@
                         <div class="form-group">
                             <label for="risk_id">Aset Kritis</label>
                             <select class="form-control" id="risk_id" name="risk_id" required>
-                                <option value="{{ old('risk_id', $mitigation->risk->id) }}" disabled selected>{{ old('risk_id', $mitigation->risk->aset_kritis) }}
+                                <option value="" disabled {{ old('risk_id', $mitigation->risk->id) == '' ? 'selected' : '' }}>Silahkan pilih aset kritis</option>
+                                @foreach ($risks as $risk)
+                                @if ($risk->kategori_id == old('risk_categories', $mitigation->risk->kategori_id))
+                                <option value="{{ $risk->id }}" {{ old('risk_id', $mitigation->risk->id) == $risk->id ? 'selected' : '' }}>
+                                    {{ $risk->aset_kritis }}
+                                </option>
+                                @endif
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="risiko">Risiko</label>
                             <select class="form-control" id="risiko" name="risiko" required>
-                                <option value="{{ old('aset_kritis', $mitigation->risk->risiko) }}" disabled selected>{{ old('aset_kritis', $mitigation->risk->risiko) }}</option>
+                                <option value="" disabled {{ old('risiko', $mitigation->risk->risiko) == '' ? 'selected' : '' }}>Silahkan pilih risiko</option>
+                                <option value="{{ $mitigation->risk->risiko }}" {{ old('risiko', $mitigation->risk->risiko) == $mitigation->risk->risiko ? 'selected' : '' }}>
+                                    {{ $mitigation->risk->risiko }}
+                                </option>
                             </select>
                         </div>
                         <div class="form-group">

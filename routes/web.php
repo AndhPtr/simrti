@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AsetKritisController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RiskController;
 use App\Http\Controllers\MitigationController;
+use App\Http\Controllers\KelemahanAsetsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +29,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware' => 'auth'], function () {
     // Use the resource route for users
     Route::resource('users', UserController::class); 
-	Route::resource('risks', RiskController::class);
-	Route::resource('mitigations', MitigationController::class);
+	Route::resource('risks', RiskController::class)->except(['show']);
+    Route::get('/risks/evaluate', [RiskController::class, 'evaluate'])->name('risks.evaluate');
+    Route::get('/risks/create_keterangan', [RiskController::class, 'createKeterangan'])->name('risks.create_keterangan');
+    Route::get('/risks/{id}/edit_keterangan', [RiskController::class, 'editKeterangan'])->name('risks.edit_keterangan');
+    Route::put('/risks/{id}', [RiskController::class, 'updateKeterangan'])->name('risks.update_keterangan');
+
+    Route::resource('mitigations', MitigationController::class);
+    Route::resource('asets', AsetKritisController::class);
 
     // Profile routes
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);

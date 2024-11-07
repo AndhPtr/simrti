@@ -17,7 +17,7 @@
                     <p>{{ __('Dashboard') }}</p>
                 </a>
             </li>
-            <li class="{{ $elementActive == 'risk' || $elementActive == 'mitigation' ? 'active' : '' }}">
+            <li class="{{ $elementActive == 'risk' || $elementActive == 'mitigation' || $elementActive == 'evaluate' ? 'active' : '' }}">
                 <a data-toggle="collapse" aria-expanded="true" href="#laravelExamples">
                     <i class="nc-icon"><img src="{{ asset('paper/img/laravel.svg') }}"></i>
                     <p>
@@ -33,6 +33,12 @@
                                 <p>{{ __('Risk List') }}</p>
                             </a>
                         </li>
+                        <li class="{{ $elementActive == 'evaluate' ? 'active' : '' }}">
+                            <a href="{{ route('risks.evaluate') }}">
+                                <i class="nc-icon nc-alert-circle-i"></i>
+                                <p>{{ __('Risk Evaluation') }}</p>
+                            </a>
+                        </li>
                         <li class="{{ $elementActive == 'mitigation' ? 'active' : '' }}">
                             <a href="{{ route('mitigations.index') }}">
                                 <i class="fas fa-clipboard-list"></i>
@@ -43,14 +49,14 @@
                 </div>
             </li>
             <li class="{{ $elementActive == 'user' || $elementActive == 'profile' ? 'active' : '' }}">
-                <a data-toggle="collapse" aria-expanded="true" href="#laravelExamples">
+                <a data-toggle="collapse" aria-expanded="true" href="#laravelExamples2">
                     <i class="nc-icon"><img src="{{ asset('paper/img/laravel.svg') }}"></i>
                     <p>
                         {{ __('User Management') }}
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse show" id="laravelExamples">
+                <div class="collapse show" id="laravelExamples2">
                     <ul class="nav">
                         <li class="{{ $elementActive == 'user' ? 'active' : '' }}">
                             <a href="{{ route('users.index') }}">

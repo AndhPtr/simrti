@@ -13,18 +13,17 @@ return new class extends Migration
     {
         Schema::create('risks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kategori_id')
-                ->constrained('risk_categories')
+            $table->foreignId('kelemahan_id')
+                ->constrained('kelemahan_asets')
                 ->onDelete('cascade');
-            $table->string('aset_kritis');
             $table->string('risiko');
             $table->string('penyebab');
             $table->string('dampak');
-            $table->unsignedTinyInteger('severity');
-            $table->unsignedTinyInteger('occurence');
-            $table->unsignedTinyInteger('detection');
-            $table->unsignedInteger('rpn');
-            $table->string('rpn_level');
+            $table->unsignedTinyInteger('severity')->nullable();
+            $table->unsignedTinyInteger('occurence')->nullable();
+            $table->unsignedTinyInteger('detection')->nullable();
+            $table->unsignedInteger('rpn')->nullable();
+            $table->string('rpn_level')->nullable();
             $table->timestamps();
         });
         DB::statement('ALTER TABLE risks ADD CONSTRAINT chk_severity CHECK (severity >= 1 AND severity <= 10)');

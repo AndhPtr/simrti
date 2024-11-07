@@ -11,7 +11,9 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Mitigations Table</h4>
+                    @can('create-mitigation')
                     <a href="{{ route('mitigations.create') }}" class="btn btn-primary">Add New Mitigation</a>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -23,7 +25,9 @@
                                 <th>RPN</th>
                                 <th>RPN Level</th>
                                 <th>Tindakan Mitigasi</th>
+                                @can('edit-mitigation' && 'delete-mitigation')
                                 <th class="text-right">Actions</th>
+                                @endcan
                             </thead>
                             <tbody>
                                 @foreach ($mitigations->sortBy(function($mitigation) {
@@ -36,6 +40,7 @@
                                     <td>{{ $mitigation->risk->rpn }}</td>
                                     <td>{{ $mitigation->risk->rpn_level }}</td>
                                     <td>{{ $mitigation->tindakan_mitigasi }}</td>
+                                    @can('edit-mitigation' && 'delete-mitigation')
                                     <td class="text-right">
                                         <!-- Edit button -->
                                         <a href="{{ route('mitigations.edit', $mitigation->id) }}" class="btn btn-info btn-sm">Edit</a>
@@ -47,6 +52,7 @@
                                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                         </form>
                                     </td>
+                                    @endcan
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -5,26 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Risk extends Model
+class AsetKritis extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'kelemahan_id',
-        'risiko',
-        'penyebab',
-        'dampak',
-        'severity',
-        'occurence',
-        'detection',
-        'rpn',
-        'rpn_level'
+        'kategori_id',
+        'name',
     ];
-
-    public function mitigations()
-    {
-        return $this->hasMany(Mitigation::class);
-    }
 
     public function riskCategories()
     {
@@ -33,6 +21,6 @@ class Risk extends Model
 
     public function kelemahanAsets()
     {
-        return $this->belongsTo(KelemahanAsets::class, 'kelemahan_id');
+        return $this->hasMany(KelemahanAsets::class);
     }
 }

@@ -15,7 +15,7 @@ class RiskRequest extends FormRequest
     {
         return [
             'kategori_risiko' => 'required',
-            'aset_kritis' => 'required',
+            'aset_id' => 'required',
             'risiko' => 'required',
             'penyebab' => 'required',
             'dampak' => 'required',
