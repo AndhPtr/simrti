@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-warning">
-                                <i class="nc-icon nc-globe text-warning"></i>
+                                <i class="fas fa-server"></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-success">
-                                <i class="nc-icon nc-money-coins text-success"></i>
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-danger">
-                                <i class="nc-icon nc-vector text-danger"></i>
+                                <i class="fas fa-clipboard-list"></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-primary">
-                                <i class="nc-icon nc-favourite-28 text-primary"></i>
+                                <i class="fas fa-users"></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
@@ -117,6 +117,7 @@
                 </div>
                 <div class="card-body">
                     <canvas id="riskLevelChart"></canvas>
+                    <div id="riskLevelCounts" class="mt-3"></div> <!-- Placeholder for risk level texts -->
                 </div>
             </div>
         </div>
@@ -150,6 +151,7 @@
             riskLevels[1] || 0 // Very High
         ];
 
+        // Generate Chart
         new Chart(document.getElementById('riskLevelChart'), {
             type: 'pie',
             data: {
@@ -168,6 +170,16 @@
                 },
             },
         });
+
+        // Add text counts below chart
+        const riskLevelCountsContainer = document.getElementById('riskLevelCounts');
+        riskLevelCountsContainer.innerHTML = levelData.map((count, index) => `
+        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+            <span style="width: 16px; height: 16px; background-color: ${levelColors[index]}; display: inline-block; margin-right: 8px;"></span>
+            <span>${levelLabels[index]}: <strong>${count}</strong></span>
+        </div>
+        `).join('');
+
         // Risk Trends Chart
         const riskTrends = @json($riskTrends);
         const trendLabels = Object.keys(riskTrends);
