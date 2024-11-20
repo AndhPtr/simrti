@@ -41,7 +41,7 @@ class AsetKritisController extends Controller
 
         AsetKritis::create($data);
 
-        return redirect()->route('risks.index')->with('success', 'Asset inputed successfully.');
+        return redirect()->route('kelemahan.index')->with('success', 'Asset inputed successfully.');
     }
 
     /**
@@ -68,7 +68,7 @@ class AsetKritisController extends Controller
 
         $aset->update($data);
 
-        return redirect()->route('risks.index')->with('success', 'Aset updated successfully.');
+        return redirect()->route('kelemahan.index')->with('success', 'Aset updated successfully.');
     }
 
     /**
@@ -77,6 +77,6 @@ class AsetKritisController extends Controller
     public function destroy(string $id)
     {
         AsetKritis::find($id)->delete();
-        return redirect()->route('risks.index')->with('success', 'Aset deleted successfully.');
+        return redirect()->route('kelemahan.index')->with('success', 'Aset deleted successfully.');
     }
 }

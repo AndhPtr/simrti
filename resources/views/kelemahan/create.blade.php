@@ -22,7 +22,7 @@
                         </ul>
                     </div>
                     @endif
-                    <form action="{{ route('risks.store') }}" method="POST">
+                    <form action="{{ route('kelemahan.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="kategori_id" class="form-label">Kategori Risiko</label>
@@ -66,7 +66,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Data from server (risk categories and risks)
         const riskcategories = @json($riskcategories);
-        const asets = @json($aset);
+        const asets = @json($asets);
 
         const kategoriRisikoSelect = document.getElementById('kategori_id');
         const asetKritisSelect = document.getElementById('aset_id');

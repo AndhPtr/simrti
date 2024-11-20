@@ -1,7 +1,7 @@
 @extends('layouts.app', [
-    'class' => '',
-    'elementActive' => 'dashboard',
-    'pageTitle' => 'Dashboard'
+'class' => '',
+'elementActive' => 'dashboard',
+'pageTitle' => 'Dashboard'
 ])
 
 @section('content')
@@ -118,15 +118,6 @@
                 <div class="card-body">
                     <canvas id="riskLevelChart"></canvas>
                 </div>
-                <div class="card-footer">
-                    <div class="legend">
-                        <i class="fa fa-circle text-danger"></i> Very High
-                        <i class="fa fa-circle text-warning"></i> High
-                        <i class="fa fa-circle text-primary"></i> Medium
-                        <i class="fa fa-circle text-success"></i> Low
-                        <i class="fa fa-circle text-gray"></i> Very Low
-                    </div>
-                </div>
             </div>
         </div>
         <div class="col-md-8">
@@ -146,12 +137,18 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Risk Levels Chart
-        const riskLevels = @json($riskLevels);
-        const levelLabels = Object.keys(riskLevels);
-        const levelData = Object.values(riskLevels);
-        const levelColors = ['#e74c3c', '#f39c12', '#3498db', '#2ecc71', '#95a5a6'];
+        const riskLevels = @json($riskLevels); // Assume this is an associative array { "5": count, "4": count, ... }
+        const levelLabels = ['Very Low', 'Low', 'Medium', 'High', 'Very High'];
+        const levelColors = ['#99FF85', '#2BFF00', 'yellow', '#FF5C5C', 'red']; // Corresponding colors
+        const levelData = [
+            riskLevels[5] || 0, // Very Low
+            riskLevels[4] || 0, // Low
+            riskLevels[3] || 0, // Medium
+            riskLevels[2] || 0, // High
+            riskLevels[1] || 0 // Very High
+        ];
 
         new Chart(document.getElementById('riskLevelChart'), {
             type: 'pie',
@@ -171,7 +168,6 @@
                 },
             },
         });
-
         // Risk Trends Chart
         const riskTrends = @json($riskTrends);
         const trendLabels = Object.keys(riskTrends);

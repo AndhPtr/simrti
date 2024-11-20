@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('risks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kelemahan_id')
-                ->constrained('kelemahan_asets')
+            $table->foreignId('aset_id')
+                ->constrained('aset_kritis')
                 ->onDelete('cascade');
             $table->string('risiko');
             $table->string('penyebab');

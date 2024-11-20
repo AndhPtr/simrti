@@ -34,14 +34,14 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="risk_id">Aset Kritis</label>
-                            <select class="form-control" id="risk_id" name="risk_id" required>
+                            <label for="aset_kritis">Aset Kritis</label>
+                            <select class="form-control" id="aset_kritis" name="aset_kritis" required>
                                 <option value="" disabled selected>Silahkan pilih aset kritis</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="risiko">Risiko</label>
-                            <select class="form-control" id="risiko" name="risiko" required>
+                            <label for="risk_id">Risiko</label>
+                            <select class="form-control" id="risk_id" name="risk_id" required>
                                 <option value="" disabled selected>Silahkan pilih risiko</option>
                                 <!-- This will be dynamically populated based on Aset Kritis -->
                             </select>
@@ -61,27 +61,28 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Data from server (risk categories and risks)
-        const riskcategories = @json($riskcategories);
-        const risks = @json($risks);
+        // Data from server (risk categories, aset_kritis, and risks)
+        const riskcategories = @json($riskcategories); // Contains kategori_id and names
+        const asets = @json($asets); // Contains aset_kritis data with kategori_id
+        const risks = @json($risks); // Contains risk data with aset_id as foreign key
 
-        const kategoriRisikoSelect = document.getElementById('risk_categories');
-        const asetKritisSelect = document.getElementById('risk_id');
-        const risikoSelect = document.getElementById('risiko');
+        const kategoriRisikoSelect = document.getElementById('risk_categories'); // Kategori dropdown
+        const asetKritisSelect = document.getElementById('aset_kritis'); // Aset Kritis dropdown
+        const risikoSelect = document.getElementById('risk_id'); // Risiko dropdown
 
         // Listen for changes on Kategori Risiko dropdown
         kategoriRisikoSelect.addEventListener('change', function() {
-            const selectedKategoriId = kategoriRisikoSelect.value;
+            const selectedKategoriId = parseInt(kategoriRisikoSelect.value); // Get selected kategori_id
 
-            // Filter the risks by selected category
-            const filteredAsetKritis = risks.filter(risk => risk.kategori_id == selectedKategoriId);
+            // Filter aset_kritis by selected kategori_id
+            const filteredAsets = asets.filter(aset => aset.kategori_id === selectedKategoriId);
 
-            // Clear and populate Aset Kritis dropdown
+            // Populate Aset Kritis dropdown
             asetKritisSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih aset kritis</option>';
-            filteredAsetKritis.forEach(aset => {
+            filteredAsets.forEach(aset => {
                 const option = document.createElement('option');
-                option.value = aset.id;
-                option.textContent = aset.aset_kritis;
+                option.value = aset.id; // aset_kritis ID
+                option.textContent = aset.name; // aset_kritis name (replace with your column)
                 asetKritisSelect.appendChild(option);
             });
 
@@ -91,17 +92,17 @@
 
         // Listen for changes on Aset Kritis dropdown
         asetKritisSelect.addEventListener('change', function() {
-            const selectedAsetKritisId = asetKritisSelect.value;
+            const selectedAsetId = parseInt(asetKritisSelect.value); // Get selected aset_kritis ID
 
-            // Filter the risks by selected Aset Kritis
-            const filteredRisiko = risks.filter(risk => risk.id == selectedAsetKritisId);
+            // Filter risks by selected aset_kritis ID
+            const filteredRisks = risks.filter(risk => risk.aset_id === selectedAsetId);
 
-            // Clear and populate Risiko dropdown
+            // Populate Risiko dropdown
             risikoSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih risiko</option>';
-            filteredRisiko.forEach(risk => {
+            filteredRisks.forEach(risk => {
                 const option = document.createElement('option');
-                option.value = risk.risiko;
-                option.textContent = risk.risiko;
+                option.value = risk.id; // Risk ID
+                option.textContent = risk.risiko; // Risk name (replace with your column)
                 risikoSelect.appendChild(option);
             });
         });

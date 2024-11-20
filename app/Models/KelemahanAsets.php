@@ -21,9 +21,4 @@ class KelemahanAsets extends Model
     {
         return $this->belongsTo(AsetKritis::class, 'aset_id');
     }
-
-    public function risk()
-    {
-        return $this->hasMany(Risk::class);
-    }
 }

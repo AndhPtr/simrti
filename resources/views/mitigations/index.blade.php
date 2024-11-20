@@ -34,11 +34,21 @@
                                 return $mitigation->risk->kategori_id;
                                 }) as $mitigation)
                                 <tr>
-                                    <td>{{ $mitigation->risk->riskCategories->kategori_risiko }}</td>
-                                    <td>{{ $mitigation->risk->aset_kritis }}</td>
+                                    <td>{{ $mitigation->risk->asetKritis->riskCategories->kategori_risiko }}</td>
+                                    <td>{{ $mitigation->risk->asetKritis->name }}</td>
                                     <td>{{ $mitigation->risk->risiko }}</td>
                                     <td>{{ $mitigation->risk->rpn }}</td>
-                                    <td>{{ $mitigation->risk->rpn_level }}</td>
+                                    @if ($mitigation->risk->rpn_level  == '1')
+                                    <td style="background-color: red; text-align:center;">Very High</td>
+                                    @elseif ($mitigation->risk->rpn_level  == '2')
+                                    <td style="background-color: #FF5C5C; text-align:center;">High</td>
+                                    @elseif ($mitigation->risk->rpn_level  == '3')
+                                    <td style="background-color: yellow; text-align:center;">Medium</td>
+                                    @elseif ($mitigation->risk->rpn_level  == '4')
+                                    <td style="background-color: #2BFF00; text-align:center;">Low</td>
+                                    @else
+                                    <td style="background-color: #99FF85; text-align:center;">Very Low</td>
+                                    @endif
                                     <td>{{ $mitigation->tindakan_mitigasi }}</td>
                                     @can('edit-mitigation' && 'delete-mitigation')
                                     <td class="text-right">

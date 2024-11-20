@@ -85,7 +85,7 @@
             const selectedKategoriId = kategoriRisikoSelect.value;
 
             // Filter the risks by selected category
-            const filteredAsetKritis = risks.filter(risk => risk.kategori_id == selectedKategoriId);
+            const filteredAsetKritis = risks.filter(risk => asetKritis => aset_kritis.kategori_id == selectedKategoriId);
 
             // Clear and populate Aset Kritis dropdown
             asetKritisSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih aset kritis</option>';

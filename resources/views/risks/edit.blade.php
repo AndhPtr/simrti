@@ -22,7 +22,6 @@
                         </ul>
                     </div>
                     @endif
-
                     <form action="{{ route('risks.update', $risk->id) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -31,14 +30,21 @@
                             <select class="form-control" id="kategori_id" name="kategori_id" required>
                                 <option value="" disabled selected>Silahkan pilih kategori risiko</option>
                                 @foreach($riskcategories as $riskcategory)
-                                <option value="{{ $riskcategory->id }}" {{ old('kategori_id', $risk->kategori_id) == $riskcategory->id ? 'selected' : '' }}> {{ $riskcategory->kategori_risiko }} </option>
+                                <option value="{{ $riskcategory->id }}" {{ old('risk_categories', $risk->asetKritis->kategori_id) == $riskcategory->id ? 'selected' : '' }}>
+                                    {{ $riskcategory->kategori_risiko }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label for="aset_kritis" class="form-label">Aset Kritis</label>
-                            <input type="text" name="aset_kritis" id="aset_kritis" class="form-control" value="{{ old('aset_kritis', $risk->aset_kritis) }}" required>
+                            <label for="aset_id" class="form-label">Aset Kritis</label>
+                            <select class="form-control" id="aset_id" name="aset_id" required>
+                                <option value="" disabled {{ old('aset_kritis', $risk->aset_id) == '' ? 'selected' : '' }}>Silahkan pilih Aset Kritis</option>
+                                <option value="{{ $risk->aset_id }}" {{ old('aset_kritis', $risk->aset_id) == $risk->aset_id ? 'selected' : '' }}>
+                                    {{ $risk->asetKritis->name }}
+                                </option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
@@ -127,6 +133,32 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const riskcategories = @json($riskcategories);
+        const asets = @json($asets);
+
+        const kategoriRisikoSelect = document.getElementById('kategori_id');
+        const asetKritisSelect = document.getElementById('aset_id');
+
+        // Listen for changes on Kategori Risiko dropdown
+        kategoriRisikoSelect.addEventListener('change', function() {
+            const selectedKategoriId = kategoriRisikoSelect.value;
+
+            // Filter the risks by selected category
+            const filteredAsetKritis = asets.filter(aset => aset.kategori_id == selectedKategoriId);
+
+            // Clear and populate Aset Kritis dropdown
+            asetKritisSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih aset kritis</option>';
+            filteredAsetKritis.forEach(aset => {
+                const option = document.createElement('option');
+                option.value = aset.id;
+                option.textContent = aset.name;
+                asetKritisSelect.appendChild(option);
+            });
+
+            // Clear Risiko dropdown since Aset Kritis changed
+            risikoSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih risiko</option>';
+        });
+
         const severityInput = document.getElementById('severity');
         const occurenceInput = document.getElementById('occurence');
         const detectionInput = document.getElementById('detection');
@@ -161,9 +193,6 @@
         severityInput.addEventListener('input', calculateRPN);
         occurenceInput.addEventListener('input', calculateRPN);
         detectionInput.addEventListener('input', calculateRPN);
-
-        calculateRPN()
-
     });
 </script>
 @endsection

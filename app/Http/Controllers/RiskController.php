@@ -25,15 +25,22 @@ class RiskController extends Controller
         $sortBy = $request->query('sort_by', 'kategori_id'); // Default sort column
         $sortDirection = $request->query('sort_direction', 'asc'); // Default sort direction
 
-        $asets = AsetKritis::orderBy($sortBy, $sortDirection)->get();
-        $kelemahan_aset = KelemahanAsets::all();
+        $risks = Risk::with('asetKritis')
+            ->when($sortBy === 'kategori_id', function ($query) use ($sortDirection) {
+                $query->join('aset_kritis', 'risks.aset_id', '=', 'aset_kritis.id')
+                    ->orderBy('aset_kritis.kategori_id', $sortDirection);
+            }, function ($query) use ($sortBy, $sortDirection) {
+                $query->orderBy($sortBy, $sortDirection);
+            })
+            ->get();
+        $asets = AsetKritis::all();
         $riskcategories = RiskCategories::all();
 
         return view('risks.index', [
-            'kelemahan_aset' => $kelemahan_aset,
+            'risks' => $risks,
             'riskcategories' => $riskcategories,
             'asets' => $asets,
-            'elementActive' => 'risk',
+            'elementActive' => 'evaluate',
             'sortBy' => $sortBy,
             'sortDirection' => $sortDirection,
         ]);
@@ -45,8 +52,8 @@ class RiskController extends Controller
     public function create()
     {
         $riskcategories = RiskCategories::all();
-        $aset = AsetKritis::all();
-        return view('risks.create', ['riskcategories' => $riskcategories, 'aset' => $aset]);
+        $asets = AsetKritis::all();
+        return view('risks.create', ['riskcategories' => $riskcategories, 'asets' => $asets]);
     }
 
     /**
@@ -54,40 +61,23 @@ class RiskController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->has('kelemahan')) {
+        $data = $request->validate([
+            'aset_id' => 'required',
+            'risiko' => 'required',
+            'penyebab' => 'required',
+            'dampak' => 'required',
+            'severity' => 'required',
+            'occurence' => 'required',
+            'detection' => 'required',
+            'rpn_level' => 'required',
+        ]);
 
-            $data = $request->validate([
-                'aset_id' => 'required',
-                'kelemahan' => 'required',
-                'kebutuhan_keamanan' => 'required',
-                'praktik_keamanan' => 'required',
-            ]);
-
-            KelemahanAsets::create($data);
-
-            return redirect()->route('risks.index')->with('success', 'Keterangan saved successfully.');
-        } elseif ($request->has('risiko')) {
-
-            $data = $request->validate([
-                'kelemahan_id' => 'required',
-                'risiko' => 'required',
-                'penyebab' => 'required',
-                'dampak' => 'required',
-                'severity' => 'required',
-                'occurence' => 'required',
-                'detection' => 'required',
-                'rpn_level' => 'required',
-            ]);
-
-            $data['rpn'] = $data['severity'] * $data['occurence'] * $data['detection'];
+        $data['rpn'] = $data['severity'] * $data['occurence'] * $data['detection'];
 
 
-            Risk::create($data);
+        Risk::create($data);
 
-            return redirect()->route('risks.evaluate')->with('success', 'Risiko Aset saved successfully.');
-        }
-
-        return redirect()->back()->withErrors('Invalid form submission.');
+        return redirect()->route('risks.index')->with('success', 'Risiko Aset saved successfully.');
     }
 
     /**
@@ -97,8 +87,8 @@ class RiskController extends Controller
     {
         $risk = Risk::find($id);
         $riskcategories = RiskCategories::all();
-        $aset = AsetKritis::all();
-        return view('risks.edit', ['risk' => $risk, 'riskcategories' => $riskcategories, 'aset' => $aset]);
+        $asets = AsetKritis::all();
+        return view('risks.edit', ['risk' => $risk, 'riskcategories' => $riskcategories, 'asets' => $asets]);
     }
 
     /**
@@ -106,92 +96,33 @@ class RiskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->has('kelemahan')) {
+        $risk = Risk::find($id);
 
-            $kelemahan_aset = KelemahanAsets::find($id);
+        $data = $request->validate([
+            'aset_id' => 'required',
+            'risiko' => 'required',
+            'penyebab' => 'required',
+            'dampak' => 'required',
+            'severity' => 'required',
+            'occurence' => 'required',
+            'detection' => 'required',
+            'rpn_level' => 'required',
+        ]);
+        $data['rpn'] = $data['severity'] * $data['occurence'] * $data['detection'];
 
-            $data = $request->validate([
-                'aset_id' => 'required',
-                'kelemahan' => 'required',
-                'kebutuhan_keamanan' => 'required',
-                'praktik_keamanan' => 'required',
-            ]);
+        $risk->update($data);
 
-            $kelemahan_aset->update($data);
-
-            return redirect()->route('risks.index')->with('success', 'Keterangan updated successfully.');
-        } elseif ($request->has('risiko')) {
-
-            $risk = Risk::find($id);
-
-            $data = $request->validate([
-                'kelemahan_id' => 'required',
-                'risiko' => 'required',
-                'penyebab' => 'required',
-                'dampak' => 'required',
-                'severity' => 'required',
-                'occurence' => 'required',
-                'detection' => 'required',
-                'rpn_level' => 'required',
-            ]);
-            $data['rpn'] = $data['severity'] * $data['occurence'] * $data['detection'];
-
-            $risk->update($data);
-
-            return redirect()->route('risks.evaluate')->with('success', 'Risiko Aset updated successfully.');
-        }
-
-        // Optional: Fallback if neither form is recognized
-        return redirect()->back()->withErrors('Invalid form submission.');
+        return redirect()->route('risks.index')->with('success', 'Risiko Aset updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        if (Risk::find($id) != null) {
-            Risk::find($id)->delete();
-            return redirect()->route('risks.index')->with('success', 'Risk deleted successfully.');
-        } elseif (KelemahanAsets::find($id) != null) {
-            KelemahanAsets::find($id)->delete();
-            return redirect()->route('risks.index')->with('success', 'Kelemahan Aset deleted successfully.');
-        } else {
-            return redirect()->back()->withErrors('Invalid delete submission.');
-        }
-    }
+        $risk = Risk::findOrFail($id);
+        $risk->delete();
 
-    public function evaluate(Request $request)
-    {
-        $sortBy = $request->query('sort_by', 'kategori_id'); // Default sort column
-        $sortDirection = $request->query('sort_direction', 'asc'); // Default sort direction
-
-        $risks = Risk::orderBy($sortBy, $sortDirection)->get();
-        $asets = AsetKritis::all();
-        $riskcategories = RiskCategories::all();
-
-        return view('risks.evaluate', [
-            'risks' => $risks,
-            'riskcategories' => $riskcategories,
-            'asets' => $asets,
-            'elementActive' => 'evaluate',
-            'sortBy' => $sortBy,
-            'sortDirection' => $sortDirection,
-        ]);
-    }
-
-    public function createKeterangan()
-    {
-        $riskcategories = RiskCategories::all();
-        $aset = AsetKritis::all();
-        return view('risks.create_keterangan', ['riskcategories' => $riskcategories, 'aset' => $aset]);
-    }
-
-    public function editKeterangan(string $id)
-    {
-        $kelemahan_aset = KelemahanAsets::find($id);
-        $riskcategories = RiskCategories::all();
-        $aset = AsetKritis::all();
-        return view('risks.edit_keterangan', ['kelemahan_aset' => $kelemahan_aset, 'riskcategories' => $riskcategories, 'aset' => $aset]);
+        return redirect()->route('risks.index')->with('success', 'Risk deleted successfully');
     }
 }

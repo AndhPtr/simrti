@@ -1,6 +1,6 @@
 @extends('layouts.app', [
 'class' => '',
-'elementActive' => 'risk',
+'elementActive' => 'evaluate',
 'pageTitle' => 'Add Risk'
 ])
 
@@ -35,8 +35,10 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="aset_kritis" class="form-label">Aset Kritis</label>
-                            <input type="text" name="aset_kritis" id="aset_kritis" class="form-control" placeholder="Masukkan aset organisasi yang memiliki risiko kegagalan" required>
+                            <label for="aset_id" class="form-label">Aset Kritis</label>
+                            <select class="form-control" id="aset_id" name="aset_id" required>
+                                <option value="" disabled selected>Silahkan pilih aset organisasi yang memiliki risiko kegagalan</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
@@ -125,6 +127,32 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const riskcategories = @json($riskcategories);
+        const asets = @json($asets);
+
+        const kategoriRisikoSelect = document.getElementById('kategori_id');
+        const asetKritisSelect = document.getElementById('aset_id');
+
+        // Listen for changes on Kategori Risiko dropdown
+        kategoriRisikoSelect.addEventListener('change', function() {
+            const selectedKategoriId = kategoriRisikoSelect.value;
+
+            // Filter the risks by selected category
+            const filteredAsetKritis = asets.filter(aset => aset.kategori_id == selectedKategoriId);
+
+            // Clear and populate Aset Kritis dropdown
+            asetKritisSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih aset kritis</option>';
+            filteredAsetKritis.forEach(aset => {
+                const option = document.createElement('option');
+                option.value = aset.id;
+                option.textContent = aset.name;
+                asetKritisSelect.appendChild(option);
+            });
+
+            // Clear Risiko dropdown since Aset Kritis changed
+            risikoSelect.innerHTML = '<option value="" disabled selected>Silahkan pilih risiko</option>';
+        });
+
         const severityInput = document.getElementById('severity');
         const occurenceInput = document.getElementById('occurence');
         const detectionInput = document.getElementById('detection');
@@ -138,19 +166,19 @@
             const detection = parseInt(detectionInput.value) || 0;
             const rpn = severity * occurence * detection;
             rpnInput.value = rpn;
-            if (rpnInput.value <= 20){
+            if (rpnInput.value <= 20) {
                 rpnLevelInput.value = '5';
                 rpnLevelDisplayInput.value = 'Very Low';
-            } else if (rpnInput.value > 20 && rpnInput.value <= 80){
+            } else if (rpnInput.value > 20 && rpnInput.value <= 80) {
                 rpnLevelInput.value = '4';
                 rpnLevelDisplayInput.value = 'Low';
-            } else if (rpnInput.value > 80 && rpnInput.value <= 120){
+            } else if (rpnInput.value > 80 && rpnInput.value <= 120) {
                 rpnLevelInput.value = '3';
                 rpnLevelDisplayInput.value = 'Medium';
-            } else if (rpnInput.value > 120 && rpnInput.value <= 200){
+            } else if (rpnInput.value > 120 && rpnInput.value <= 200) {
                 rpnLevelInput.value = '2';
                 rpnLevelDisplayInput.value = 'High';
-            } else if (rpnInput.value > 200){
+            } else if (rpnInput.value > 200) {
                 rpnLevelInput.value = '1';
                 rpnLevelDisplayInput.value = 'Very High';
             }
@@ -159,7 +187,6 @@
         severityInput.addEventListener('input', calculateRPN);
         occurenceInput.addEventListener('input', calculateRPN);
         detectionInput.addEventListener('input', calculateRPN);
-
     });
 </script>
 @endsection

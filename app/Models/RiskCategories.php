@@ -14,11 +14,6 @@ class RiskCategories extends Model
         'keterangan',
     ];
 
-    public function risk()
-    {
-        return $this->hasMany(Risk::class);
-    }
-
     public function asetKritis()
     {
         return $this->hasMany(AsetKritis::class);

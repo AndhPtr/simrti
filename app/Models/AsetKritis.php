@@ -23,4 +23,9 @@ class AsetKritis extends Model
     {
         return $this->hasMany(KelemahanAsets::class);
     }
+
+    public function risk()
+    {
+        return $this->hasMany(Risk::class);
+    }
 }

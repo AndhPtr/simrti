@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mitigation;
 use App\Models\Risk;
 use App\Http\Requests\RiskRequest;
+use App\Models\AsetKritis;
 use App\Models\RiskCategories;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -33,7 +34,8 @@ class MitigationController extends Controller
     {
         $riskcategories = RiskCategories::all();
         $risks = Risk::all();
-        return view('mitigations.create', ['risks' => $risks, 'riskcategories' => $riskcategories]);
+        $asets = AsetKritis::all();
+        return view('mitigations.create', ['risks' => $risks, 'riskcategories' => $riskcategories, 'asets'=>$asets]);
     }
 
     /**
