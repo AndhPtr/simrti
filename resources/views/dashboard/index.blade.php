@@ -26,9 +26,11 @@
                 </div>
                 <div class="card-footer">
                     <hr>
-                    <div class="stats">
-                        <i class="nc-icon nc-simple-add"></i> Tambah Aset
-                    </div>
+                    <a href="{{ route('kelemahan.index') }}" style="text-decoration: none; color: inherit;">
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Tambah Aset
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -51,9 +53,11 @@
                 </div>
                 <div class="card-footer">
                     <hr>
-                    <div class="stats">
-                        <i class="nc-icon nc-simple-add"></i> Tambah Risiko
-                    </div>
+                    <a href="{{ route('risks.index') }}" style="text-decoration: none; color: inherit;">
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Tambah Risiko
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -76,9 +80,11 @@
                 </div>
                 <div class="card-footer">
                     <hr>
-                    <div class="stats">
-                        <i class="nc-icon nc-simple-add"></i> Tambah Mitigasi
-                    </div>
+                    <a href="{{ route('mitigations.index') }}" style="text-decoration: none; color: inherit;">
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Tambah Mitigasi
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -101,9 +107,11 @@
                 </div>
                 <div class="card-footer">
                     <hr>
-                    <div class="stats">
-                        <i class="nc-icon nc-simple-add"></i> Tambah User
-                    </div>
+                    <a href="{{ route('users.index') }}" style="text-decoration: none; color: inherit;">
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Tambah User
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
