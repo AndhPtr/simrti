@@ -39,7 +39,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Aset Kritis Organisasi</h4>
+                    @can('create-risk')
                     <a href="{{ route('asets.create') }}" class="btn btn-primary btn-sm">Tambah Aset Kritis</a>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <div class="table-responsive" style="max-height:500px; overflow-y:auto">
@@ -48,7 +50,7 @@
                                 <tr>
                                     <th>Kategori Risiko</th>
                                     <th>Aset Kritis</th>
-                                    @can('edit-risk' && 'delete-risk')
+                                    @can('create-risk')
                                     <th class="text-right">Actions</th>
                                     @endcan
                                 </tr>
@@ -71,7 +73,7 @@
                                 <tr>
                                     <td rowspan="{{ $rowCount }}">{{ $currentKategori }}</td>
                                     <td>{{ $aset->name }}</td>
-                                    @can('edit-risk' && 'delete-risk')
+                                    @can('create-risk')
                                     <td class="text-right">
                                         <!-- Edit button -->
                                         <a href="{{ route('asets.edit', $aset->id) }}" class="btn btn-info btn-sm">Edit</a>
@@ -87,7 +89,7 @@
                                 @else
                                 <tr>
                                     <td>{{ $aset->name }}</td>
-                                    @can('edit-risk' && 'delete-risk')
+                                    @can('create-risk')
                                     <td class="text-right">
                                         <!-- Edit button -->
                                         <a href="{{ route('asets.edit', $aset->id) }}" class="btn btn-info btn-sm">Edit</a>
@@ -128,7 +130,7 @@
                                     <th>Kelemahan</th>
                                     <th>Kebutuhan Keamanan</th>
                                     <th>Praktik Keamanan</th>
-                                    @can('edit-risk' && 'delete-risk')
+                                    @can('create-risk')
                                     <th class="text-right">Actions</th>
                                     @endcan
                                 </tr>
@@ -166,7 +168,7 @@
                                     <td>{{ $kelemahan_aset->kelemahan }}</td>
                                     <td>{{ $kelemahan_aset->kebutuhan_keamanan }}</td>
                                     <td>{{ $kelemahan_aset->praktik_keamanan }}</td>
-                                    @can('edit-risk' && 'delete-risk')
+                                    @can('create-risk')
                                     <td class="text-right">
                                         <!-- Edit button -->
                                         <a href="{{ route('kelemahan.edit', $kelemahan_aset->id) }}" class="btn btn-info btn-sm">Edit</a>

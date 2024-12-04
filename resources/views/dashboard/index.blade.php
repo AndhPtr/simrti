@@ -27,9 +27,15 @@
                 <div class="card-footer">
                     <hr>
                     <a href="{{ route('kelemahan.index') }}" style="text-decoration: none; color: inherit;">
+                        @if(auth()->user()->can('create-risk'))
                         <div class="stats">
-                            <i class="nc-icon nc-simple-add"></i> Tambah Aset
+                            <i class="nc-icon nc-simple-add"></i> Tambah Kelemahan
                         </div>
+                        @else
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Lihat Kelemahan
+                        </div>
+                        @endif
                     </a>
                 </div>
             </div>
@@ -54,9 +60,15 @@
                 <div class="card-footer">
                     <hr>
                     <a href="{{ route('risks.index') }}" style="text-decoration: none; color: inherit;">
+                        @if(auth()->user()->can('create-user'))
                         <div class="stats">
                             <i class="nc-icon nc-simple-add"></i> Tambah Risiko
                         </div>
+                        @else
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Lihat Risiko
+                        </div>
+                        @endif
                     </a>
                 </div>
             </div>
@@ -81,9 +93,15 @@
                 <div class="card-footer">
                     <hr>
                     <a href="{{ route('mitigations.index') }}" style="text-decoration: none; color: inherit;">
+                        @if(auth()->user()->can('create-mitigation'))
                         <div class="stats">
                             <i class="nc-icon nc-simple-add"></i> Tambah Mitigasi
                         </div>
+                        @else
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Lihat Mitigasi
+                        </div>
+                        @endif
                     </a>
                 </div>
             </div>
@@ -108,9 +126,15 @@
                 <div class="card-footer">
                     <hr>
                     <a href="{{ route('users.index') }}" style="text-decoration: none; color: inherit;">
+                        @if(auth()->user()->can('create-user'))
                         <div class="stats">
                             <i class="nc-icon nc-simple-add"></i> Tambah User
                         </div>
+                        @else
+                        <div class="stats">
+                            <i class="nc-icon nc-simple-add"></i> Lihat User
+                        </div>
+                        @endif
                     </a>
                 </div>
             </div>

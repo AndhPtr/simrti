@@ -25,7 +25,7 @@
                                 <th>RPN</th>
                                 <th>RPN Level</th>
                                 <th>Tindakan Mitigasi</th>
-                                @can('edit-mitigation' && 'delete-mitigation')
+                                @can('create-mitigation')
                                 <th class="text-right">Actions</th>
                                 @endcan
                             </thead>
@@ -50,7 +50,7 @@
                                     <td style="background-color: #99FF85; text-align:center;">Very Low</td>
                                     @endif
                                     <td>{{ $mitigation->tindakan_mitigasi }}</td>
-                                    @can('edit-mitigation' && 'delete-mitigation')
+                                    @can('create-mitigation')
                                     <td class="text-right">
                                         <!-- Edit button -->
                                         <a href="{{ route('mitigations.edit', $mitigation->id) }}" class="btn btn-info btn-sm">Edit</a>

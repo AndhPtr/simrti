@@ -136,7 +136,7 @@
                                     @else
                                     <td style="background-color: #99FF85; text-align:center;">Very Low</td>
                                     @endif
-                                    @can('edit-risk' && 'delete-risk')
+                                    @can('create-risk')
                                     <td class="text-right">
                                         <!-- Edit button -->
                                         <a href="{{ route('risks.edit', $risk->id) }}" class="btn btn-info btn-sm">Edit</a>
